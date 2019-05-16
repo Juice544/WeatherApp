@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { getWeather, newWeather } from '../../action/action';
 import { connect } from 'react-redux';
 import './index.css';
+import List from '../List';
+import Info from '../Info';
 
 const API_KEY = '291a14dfaf03274b82e10696fcd39d78';
 
@@ -107,36 +109,14 @@ class Weather extends Component {
         return ( 
             <div className = 'wrapper'>
                 <div className = 'application'>
-                    <div className = 'left block'>
-                        <h2>Недавно просмотренные города</h2>
-                        <div className = 'cities'>
-                            <ul>
-                                {(this.state.watchCities.length > 0) && this.state.watchCities.map((item, i) => {
-                                      return  <li key = {i} name = {i} onClick = {() => this.selectCity(i)}>{item.city}, {item.country}</li>
-                                    }
-                                )}
-                            </ul>
-                        </div>
-                    </div>
-                    <div className = 'right block'>
-                        <form onSubmit = {this.handleSubmit}>
-                            <input type = 'text' placeholder = 'Kiev' value = {this.state.city} name = 'city' onChange = {this.handleChange} />
-                            <input type = 'text' placeholder = 'ua' value = {this.state.country} name = 'country' onChange = {this.handleChange} />
-                            <button type = 'submit'>Поиск</button>
-                        </form>
-                    {!this.state.errMsg 
-                        ? 
-                        this.props.data[this.state.curCity] && 
-                            <div className = 'weather-info'>
-                                {<p>Город: {this.props.data[this.state.curCity].name}, {this.props.data[this.state.curCity].sys.country}</p>}
-                                {<p>Температура: {Math.floor(this.props.data[this.state.curCity].main.temp - 273.15)} ℃</p>}
-                                {<p>Влажность: {this.props.data[this.state.curCity].main.humidity } %</p>}
-                                {<p>Давление: {this.props.data[this.state.curCity].main.humidity } мм</p>}
-                            </div>
-                        :
-                        <h1>{this.state.errMsg}</h1>
-                    }
-                    </div>
+                    <List watchCities = {this.state.watchCities} selectCity = {this.selectCity.bind(this)} />
+                    <Info   city = {this.state.city}
+                            country = {this.state.country}
+                            curCity = {this.state.curCity}
+                            data = {this.props.data} 
+                            errMsg = {this.state.errMsg}
+                            handleChange = {this.handleChange}
+                            handleSubmit = {this.handleSubmit} />
                 </div>
             </div>
          );
